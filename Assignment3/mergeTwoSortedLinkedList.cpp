@@ -63,11 +63,13 @@ class SinglyLinkedList{
     }
 
     void printList(){
+        if(head==NULL) return;
         Node* curr = head;
         while(curr!=NULL){
             cout<<curr->data<<" ";
             curr = curr->next;
         }
+        cout<<endl;
     }
 
     void deleteAtBegin(){
@@ -103,16 +105,29 @@ class SinglyLinkedList{
     }
 };
 
-SinglyLinkedList merge(SinglyLinkedList* l1, SinglyLinkedList* l2){
+SinglyLinkedList mergeTwoLinkedList(SinglyLinkedList* l1, SinglyLinkedList* l2){
     Node* curr1 = l1->head;
     Node* curr2 = l2->head;
-    while(curr1!-NULl&&)
-    if(curr1->next->data>curr2->data){
-        Node* temp = curr2;
-        curr2 = curr2->next;
-        temp->next = curr1->next;
-        curr1 = temp;
+    SinglyLinkedList res;
+    
+    res.head = new Node(0);
+    Node* curr = res.head;
+    
+    while(curr1!=NULL&&curr2!=NULL){
+        if(curr1->data<=curr2->data){
+            curr->next = curr1;
+            curr1 = curr1->next;
+            curr = curr->next;
+        } else{
+            curr->next = curr2;
+            curr2 = curr2->next;
+            curr = curr->next;
+        }
     }
+    if(curr2!=NULL) curr->next = curr2;
+    if(curr1!=NULL) curr->next = curr1;
+    res.head = res.head->next;
+    return res;
 }
 
 
@@ -121,11 +136,18 @@ int main(){
     SinglyLinkedList l1 ;
     l1.insertAtEnd(5);
     l1.insertAtEnd(7);
-    l1.insertAtEnd(2);
-    l1.insertAtEnd(2);
-    l1.insertAtEnd(2);
-    l1.insertAtEnd(2);
-    l1.insertAtEnd(2);
+    l1.insertAtEnd(10);
+    l1.insertAtEnd(19);
+    SinglyLinkedList l2;
+    l2.insertAtEnd(3);
+    l2.insertAtEnd(7);
+    l2.insertAtEnd(14);
+
+    SinglyLinkedList l  = mergeTwoLinkedList(&l1, &l2);
+    l.printList();
+
+
+
 
 
 

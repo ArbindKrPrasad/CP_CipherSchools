@@ -35,10 +35,12 @@ class SinglyLinkedList{
         if(head == NULL) head = temp;
         else{
             Node* curr = head;
-            while(curr->next!=NULL){
+            Node* prev = NULL;
+            while(curr!=NULL){
+                prev = curr;
                 curr= curr->next;
             }
-            curr->next = temp;
+            prev->next = temp;
         }
     }
 
@@ -47,8 +49,7 @@ class SinglyLinkedList{
         Node* temp = new Node(x);
         if(head==NULL) head = temp;
         Node* curr = head;
-        int count = 1;
-
+        int count = 0;
         while(curr->next!=NULL && count<pos){
             curr = curr->next;
             count++;
@@ -62,11 +63,13 @@ class SinglyLinkedList{
     }
 
     void printList(){
+        if(head==NULL) return;
         Node* curr = head;
         while(curr!=NULL){
             cout<<curr->data<<" ";
             curr = curr->next;
         }
+        cout<<endl;
     }
 
     void deleteAtBegin(){
@@ -91,90 +94,66 @@ class SinglyLinkedList{
             delete temp;
         }
     }
-
-    void reverseLinkedListIterative(){
-        if(head==NULL) return;
-        Node* prev = NULL;
+    int getCount(){
+        int count = 0;
         Node* curr = head;
         while(curr!=NULL){
-            Node* next = curr->next;
-            curr->next= prev;
-            prev = curr;
-            curr = next;
-            
+            count++;
+            curr = curr->next;
         }
-        head = prev;
-        cout<<endl;
-    }
-
-    void reverseRecursiveFrom(Node* curr, Node* prev){
-        if(curr==NULL) {
-            head = prev;
-            cout<<endl;
-        }
-        else{
-            Node* next = curr->next;
-            curr->next = prev;
-            reverseRecursiveFrom(next, curr);
-        }
-        
-    }
-
-    void reverseLinkedListRecursive(){
-        if(head==NULL) return;
-        reverseRecursiveFrom(head, NULL);
-    }
-
-
-
-    // ---------------- PALENDROMIC LINKED LIST -----------------// 
-
-    bool isPalendrome(){
-        Node* fast = head;
-        Node* slow = head;
-        Node* firstHead = head;
-        Node* slowprev, *fastprev;
-        while(fast->next!=NULL&&fast->next->next!=NULL){
-            slowprev = slow;
-            slow = slow->next;
-            fast = fast->next->next;
-        }
-    
-        if(fast->next!=NULL){
-            Node* slowNext = slow->next;
-            slow->next=NULL;
-            reverseRecursiveFrom(slowNext, NULL);
-        } else{
-            slowprev->next = NULL;
-            reverseRecursiveFrom(slow, NULL);
-        }
-        
-        Node* secondhead = head;
-
-        while(firstHead!=NULL&&secondhead!=NULL){
-            if(secondhead->data != firstHead->data){
-                return false;
-            }
-            firstHead = firstHead->next;
-            secondhead = secondhead->next;
-        }
-        return true;
+        return count;
     }
 };
 
 
+Node* reverseAltK(Node* head, int k, int alt){
+    Node* curr = head, *next = NULL, *prev = NULL;
+    int count = 0;
+    
+    if(alt%2==0){
+        while(curr!=NULL&&count<k){
+            cout<<curr->data<<" ";
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+            count++;
+        }
+    } else{
+        while(curr!=NULL&&count<k){
+            cout<<curr->data<<" ";
+            curr = curr->next;
+            count++;
+        }
+    }
+    if(next!=NULL){
+        Node* restHead = reverseAltK(next, k, alt+1);
+        
+        head->next = restHead;
+    }
+
+    return prev;
+}
+
 
 int main(){
-    SinglyLinkedList l ;
-    l.insertAtBegin(10);
-    l.insertAtBegin(20);
-    l.insertAtBegin(30);
-    // l.insertAtBegin(20);
-    l.insertAtBegin(20);
-    l.insertAtBegin(10);
-    l.printList();
+    SinglyLinkedList l1;
+    l1.insertAtEnd(5);
+    l1.insertAtEnd(7);
+    l1.insertAtEnd(10);
+    l1.insertAtEnd(19);
+    l1.insertAtEnd(20);
+    l1.insertAtEnd(27);
+    l1.insertAtEnd(15);
+    l1.insertAtEnd(67);
+    l1.insertAtEnd(23);
+    l1.insertAtEnd(6);
 
-    cout<<l.isPalendrome(); 
-
+    Node* nd = reverseAltK(l1.head, 3, 0);
+    cout<<endl;
+    while(nd!=NULL){
+        cout<<nd->data<<" ";
+        nd = nd->next;
+    }
     return 0;
 }

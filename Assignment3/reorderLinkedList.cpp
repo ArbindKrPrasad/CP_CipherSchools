@@ -67,6 +67,7 @@ class SinglyLinkedList{
             cout<<curr->data<<" ";
             curr = curr->next;
         }
+        cout<<endl;
     }
 
     void deleteAtBegin(){
@@ -124,57 +125,67 @@ class SinglyLinkedList{
         if(head==NULL) return;
         reverseRecursiveFrom(head, NULL);
     }
-
-
-
-    // ---------------- PALENDROMIC LINKED LIST -----------------// 
-
-    bool isPalendrome(){
-        Node* fast = head;
-        Node* slow = head;
-        Node* firstHead = head;
-        Node* slowprev, *fastprev;
-        while(fast->next!=NULL&&fast->next->next!=NULL){
-            slowprev = slow;
-            slow = slow->next;
-            fast = fast->next->next;
-        }
-    
-        if(fast->next!=NULL){
-            Node* slowNext = slow->next;
-            slow->next=NULL;
-            reverseRecursiveFrom(slowNext, NULL);
-        } else{
-            slowprev->next = NULL;
-            reverseRecursiveFrom(slow, NULL);
-        }
-        
-        Node* secondhead = head;
-
-        while(firstHead!=NULL&&secondhead!=NULL){
-            if(secondhead->data != firstHead->data){
-                return false;
-            }
-            firstHead = firstHead->next;
-            secondhead = secondhead->next;
-        }
-        return true;
-    }
 };
+
+
+
+void reorderLinkedList(Node* head){
+    Node* fast = head;
+    Node* slow = head;
+    Node* slowprev = NULL;
+    while(fast!=NULL&&fast->next!=NULL){
+        slowprev = slow;
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+
+    slowprev->next=NULL;
+    Node* list2;
+
+    list2 = slow;
+    SinglyLinkedList* s;
+    s->head = list2;
+
+    s->reverseRecursiveFrom(list2, NULL);
+
+    Node* reverseHead = s->head;
+    Node* curr = reverseHead;
+    while(curr!=NULL){
+        cout<<curr->data;
+        curr = curr->next;
+    }
+
+    // Node *curr1 = list->head, *curr2 = list2->head;
+    // while(curr1!=NULL&&curr2!=NULL){
+    //     curr->next = curr1;
+    //     curr1->next;
+    //     curr = curr->next;
+    //     curr->next = curr2;
+    //     curr2 = curr2->next;
+    //     curr = curr->next;
+    // }
+    // res->printList();
+
+    // if(curr2!=NULL) curr ->next = curr2;
+    // if(curr1!=NULL) curr -> next = curr1;
+    // list->head = res.head->next;
+
+}
 
 
 
 int main(){
     SinglyLinkedList l ;
-    l.insertAtBegin(10);
-    l.insertAtBegin(20);
-    l.insertAtBegin(30);
-    // l.insertAtBegin(20);
-    l.insertAtBegin(20);
-    l.insertAtBegin(10);
-    l.printList();
-
-    cout<<l.isPalendrome(); 
-
+    l.insertAtEnd(1);
+    l.insertAtEnd(2);
+    l.insertAtEnd(3);
+    l.insertAtEnd(4);
+    l.insertAtEnd(5);
+    l.insertAtEnd(6);
+    reorderLinkedList(l.head);
+    //l.printList();
+    
+    
     return 0;
 }
